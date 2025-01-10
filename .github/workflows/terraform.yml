@@ -31,14 +31,14 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
         env:
-          TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          TF_VAR_aws_region: "eu-west-1"
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: "eu-west-1"
 
       # 5. Apply Terraform changes
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
         env:
-          TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          TF_VAR_aws_region: "eu-west-1"
+          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: "eu-west-1"
