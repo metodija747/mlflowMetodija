@@ -8,6 +8,13 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+resource "null_resource" "trigger_ec2_recreation" {
+  triggers = {
+    variables_hash = filesha256("${path.module}/variables.tf")
+    user_data_hash = filesha256("${path.module}/user_data.sh.tpl")
+  }
+}
+
 resource "aws_instance" "mlflow_server" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
@@ -31,15 +38,10 @@ resource "aws_instance" "mlflow_server" {
 
   lifecycle {
     create_before_destroy = true
-
-    replace_triggered_by = [
-      # Recreate if user_data.sh.tpl changes
-      filesha256("${path.module}/user_data.sh.tpl"),
-      
-      # Recreate if mlflow_users variable changes
-      sha256(jsonencode(var.mlflow_users))
-    ]
   }
+
+  depends_on = [null_resource.trigger_ec2_recreation]
+
 
   tags = {
     Name = "mlflow-ec2-eu-west-1"
