@@ -27,15 +27,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           AWS_DEFAULT_REGION: "eu-west-1" 
 
-      # 4. Plan Terraform changes
       - name: Terraform Plan
-        run: terraform plan -out=tfplan \
-              -var="aws_access_key_id=${{ secrets.aws_access_key_id }}" \
-              -var="aws_secret_access_key=${{ secrets.aws_secret_access_key }}" \
+        run: terraform plan -out=tfplan -var="aws_access_key_id=${{ secrets.aws_access_key_id }}" -var="aws_secret_access_key=${{ secrets.aws_secret_access_key }}"
 
       - name: Terraform Apply
-        run: terraform apply \
-              -var="aws_access_key_id=${{ secrets.aws_access_key_id }}" \
-              -var="aws_secret_access_key=${{ secrets.aws_secret_access_key }}" \
-              -auto-approve \
-              tfplan
+        run: terraform apply -var="aws_access_key_id=${{ secrets.aws_access_key_id }}" -var="aws_secret_access_key=${{ secrets.aws_secret_access_key }}" -auto-approve tfplan
