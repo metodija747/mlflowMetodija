@@ -27,18 +27,10 @@ resource "aws_instance" "mlflow_server" {
     aws_region            = var.aws_region
     aws_access_key_id     = var.aws_access_key_id
     aws_secret_access_key = var.aws_secret_access_key
-    variable_hash         = sha256(jsonencode(var.mlflow_users))
-    user_data_hash        = filesha256("${path.module}/user_data.sh.tpl")
   })
 
   lifecycle {
     create_before_destroy = true
-
-    # Enforce replacement on specific triggers
-    replace_triggered_by = [
-      sha256(jsonencode(var.mlflow_users)),           # Track changes in mlflow_users variable
-      filesha256("${path.module}/user_data.sh.tpl")  # Track changes in user_data.sh.tpl
-    ]
   }
 
   tags = {

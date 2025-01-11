@@ -27,6 +27,15 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           AWS_DEFAULT_REGION: "eu-west-1" 
 
+      - name: Check for changes in specific files
+        id: file_check
+        run: |
+          echo "file_changed=$(git diff --name-only HEAD^ HEAD | grep -Eq 'variables\.tf|user_data\.sh\.tpl' && echo true || echo false)" >> $GITHUB_ENV
+
+      - name: Taint EC2 instance
+        if: env.file_changed == 'true'
+        run: terraform taint aws_instance.mlflow_server
+
       - name: Terraform Plan
         run: terraform plan -out=tfplan -var="aws_access_key_id=${{ secrets.aws_access_key_id }}" -var="aws_secret_access_key=${{ secrets.aws_secret_access_key }}"
         env:
