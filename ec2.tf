@@ -15,6 +15,7 @@ resource "aws_instance" "mlflow_server" {
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
 
+  # Templatize user_data
   user_data = templatefile("${path.module}/user_data.sh.tpl", {
     htpasswd_commands       = local.htpasswd_commands
     db_username             = var.db_username
@@ -27,6 +28,15 @@ resource "aws_instance" "mlflow_server" {
     aws_access_key_id       = var.aws_access_key_id
     aws_secret_access_key   = var.aws_secret_access_key
   })
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  triggers = {
+    user_data_hash    = filesha256("${path.module}/user_data.sh.tpl")
+    mlflow_users_hash = sha256(jsonencode(var.mlflow_users))
+  }
 
   tags = {
     Name = "mlflow-ec2-eu-west-1"
