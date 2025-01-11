@@ -17,25 +17,28 @@ resource "aws_instance" "mlflow_server" {
 
   # Templatize user_data
   user_data = templatefile("${path.module}/user_data.sh.tpl", {
-    htpasswd_commands       = local.htpasswd_commands
-    db_username             = var.db_username
-    db_password             = var.db_password
-    db_name                 = var.db_name
-    db_host                 = aws_db_instance.mlflow_rds.address
-    bucket_name             = aws_s3_bucket.mlflow_artifacts.bucket
-    mlflow_image            = var.mlflow_image
-    aws_region              = var.aws_region
-    aws_access_key_id       = var.aws_access_key_id
-    aws_secret_access_key   = var.aws_secret_access_key
+    htpasswd_commands     = local.htpasswd_commands
+    db_username           = var.db_username
+    db_password           = var.db_password
+    db_name               = var.db_name
+    db_host               = aws_db_instance.mlflow_rds.address
+    bucket_name           = aws_s3_bucket.mlflow_artifacts.bucket
+    mlflow_image          = var.mlflow_image
+    aws_region            = var.aws_region
+    aws_access_key_id     = var.aws_access_key_id
+    aws_secret_access_key = var.aws_secret_access_key
   })
 
   lifecycle {
     create_before_destroy = true
-  }
 
-  triggers = {
-    user_data_hash    = filesha256("${path.module}/user_data.sh.tpl")
-    mlflow_users_hash = sha256(jsonencode(var.mlflow_users))
+    replace_triggered_by = [
+      # Recreate if user_data.sh.tpl changes
+      filesha256("${path.module}/user_data.sh.tpl"),
+      
+      # Recreate if mlflow_users variable changes
+      sha256(jsonencode(var.mlflow_users))
+    ]
   }
 
   tags = {
