@@ -33,6 +33,12 @@ resource "aws_instance" "mlflow_server" {
 
   lifecycle {
     create_before_destroy = true
+
+    # Enforce replacement on specific triggers
+    replace_triggered_by = [
+      sha256(jsonencode(var.mlflow_users)),           # Track changes in mlflow_users variable
+      filesha256("${path.module}/user_data.sh.tpl")  # Track changes in user_data.sh.tpl
+    ]
   }
 
   tags = {
