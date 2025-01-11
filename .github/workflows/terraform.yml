@@ -9,36 +9,25 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: "eu-west-1"
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
 
-      # 2. Set up Terraform
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.10.1
 
-      # 3. Initialize Terraform (Backend Authentication)
-      - name: Initialize Terraform
+      - name: Terraform Init
         run: terraform init
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "eu-west-1"  # Optional if region is fixed
 
-      # 4. Plan Terraform changes
       - name: Terraform Plan
         run: terraform plan -out=tfplan
-        env:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: "eu-west-1"
 
-      # 5. Apply Terraform changes
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
-        env:
-          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: "eu-west-1"

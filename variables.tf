@@ -78,14 +78,6 @@ variable "instance_type" {
   default = "t3.medium"
 }
 
-variable "aws_access_key_id" {
-  type = string
-}
-
-variable "aws_secret_access_key" {
-  type = string
-}
-
 variable "root_domain_name" {
   type    = string
   default = "emteqmlflow.com"
