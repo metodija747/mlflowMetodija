@@ -8,13 +8,6 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-resource "null_resource" "trigger_ec2_recreation" {
-  triggers = {
-    variables_hash = filesha256("${path.module}/variables.tf")
-    user_data_hash = filesha256("${path.module}/user_data.sh.tpl")
-  }
-}
-
 resource "aws_instance" "mlflow_server" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
@@ -34,14 +27,13 @@ resource "aws_instance" "mlflow_server" {
     aws_region            = var.aws_region
     aws_access_key_id     = var.aws_access_key_id
     aws_secret_access_key = var.aws_secret_access_key
+    variable_hash         = sha256(jsonencode(var.mlflow_users))
+    user_data_hash        = filesha256("${path.module}/user_data.sh.tpl")
   })
 
   lifecycle {
     create_before_destroy = true
   }
-
-  depends_on = [null_resource.trigger_ec2_recreation]
-
 
   tags = {
     Name = "mlflow-ec2-eu-west-1"
