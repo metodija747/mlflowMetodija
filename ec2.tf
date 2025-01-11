@@ -15,7 +15,7 @@ resource "aws_instance" "mlflow_server" {
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
 
-  # Templatize user_data
+  # Templatize   user_data
   user_data = templatefile("${path.module}/user_data.sh.tpl", {
     htpasswd_commands     = local.htpasswd_commands
     db_username           = var.db_username

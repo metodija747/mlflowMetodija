@@ -38,7 +38,7 @@ variable "mlflow_users" {
     { username = "data_sci_2", password = "Password123!" },
     { username = "data_sci_3", password = "Password123!" },
     { username = "data_sci_4", password = "Password123!" },
-    { username = "data_sci_8", password = "Password123!" }
+    { username = "data_sci_9", password = "Password123!" }
   ]
 }
 

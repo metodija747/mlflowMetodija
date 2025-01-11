@@ -4,7 +4,7 @@ set -ex
 # # 1) Unattended upgrades
 apt-get update -y
 
-# 2) Docker, Nginx, Python tools
+# 2) Docker, Nginx,  Python tools
 apt-get install -y docker.io nginx apache2-utils python3-pip
 systemctl enable docker
 systemctl start docker
