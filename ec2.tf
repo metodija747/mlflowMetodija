@@ -24,8 +24,8 @@ resource "aws_instance" "mlflow_server" {
     bucket_name             = aws_s3_bucket.mlflow_artifacts.bucket
     mlflow_image            = var.mlflow_image
     aws_region              = var.aws_region
-    aws_access_key_id       = var.aws_access_key_id
-    aws_secret_access_key   = var.aws_secret_access_key
+    aws_access_key_id       = var.AWS_ACCESS_KEY_ID
+    aws_secret_access_key   = var.AWS_SECRET_ACCESS_KEY
   })
 
   tags = {
