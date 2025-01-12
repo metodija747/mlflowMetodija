@@ -22,7 +22,7 @@ resource "aws_instance" "mlflow_server" {
     db_password           = var.db_password
     db_name               = var.db_name
     db_host               = aws_db_instance.mlflow_rds.address
-    bucket_name           = aws_s3_bucket.mlflow_artifacts.bucket
+    bucket_name           = var.bucket_name
     mlflow_image          = var.mlflow_image
     aws_region            = var.aws_region
   })
