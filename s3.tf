@@ -25,8 +25,8 @@ resource "aws_s3_bucket_policy" "mlflow_bucket_policy" {
           "s3:PutObject"
         ],
         Resource  = [
-          "${aws_s3_bucket.mlflow_artifacts.arn}",
-          "${aws_s3_bucket.mlflow_artifacts.arn}/*"
+          "arn:aws:s3:::${var.bucket_name}",          
+          "arn:aws:s3:::${var.bucket_name}/*"    
         ]
       }
     ]
