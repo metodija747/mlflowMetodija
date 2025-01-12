@@ -65,7 +65,7 @@ variable "db_instance_class" {
 
 variable "bucket_name" {
   type    = string
-  default = "my-mlflow-artifacts-v1-20250108-unique"
+  default = "emteq-mlflow"
 }
 
 variable "mlflow_image" {
