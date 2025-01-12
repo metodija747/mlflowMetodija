@@ -48,8 +48,6 @@ aws ecr get-login-password --region ${aws_region} \
 
 # 6) Run the MLflow Docker container
 docker run -d -p 5000:5000 \
-  -e AWS_ACCESS_KEY_ID="${aws_access_key_id}" \
-  -e AWS_SECRET_ACCESS_KEY="${aws_secret_access_key}" \
   -e AWS_DEFAULT_REGION="${aws_region}" \
   -e DB_USERNAME="${db_username}" \
   -e DB_PASSWORD="${db_password}" \
